@@ -5,31 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Send a Hug</title>
   <style>
-    body{margin:0;font-family:Arial,sans-serif;text-align:center;background:#fff6f6;padding:40px 18px;color:#222;}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#fff6f6;
+      padding:40px 18px;
+      color:#222;
+      text-align:center;
+    }
     .wrap{max-width:720px;margin:0 auto;}
-    h1{color:#b83b5e;margin:0 0 10px;}
-    p{margin:0 0 18px;color:#555;font-size:18px;}
-    .hero{width:100%;max-width:520px;border-radius:14px;box-shadow:0 18px 45px rgba(0,0,0,.18);margin:16px auto 22px;display:block;}
-    .btn{display:block;margin:12px auto;padding:14px 16px;max-width:360px;background:#b83b5e;color:#fff;text-decoration:none;border-radius:10px;font-size:18px;}
-    .small{margin-top:18px;font-size:14px;color:#777;max-width:520px;margin-left:auto;margin-right:auto;}
+    h1{color:#b83b5e;margin-bottom:8px;}
+    p{font-size:18px;color:#555;margin-bottom:16px;}
+    .hero{
+      width:100%;
+      max-width:520px;
+      border-radius:14px;
+      box-shadow:0 18px 45px rgba(0,0,0,.18);
+      margin:20px auto;
+      display:block;
+    }
+    .btn{
+      display:block;
+      margin:14px auto;
+      padding:14px 18px;
+      max-width:360px;
+      background:#b83b5e;
+      color:#fff;
+      text-decoration:none;
+      border-radius:10px;
+      font-size:18px;
+    }
+    .note{
+      font-size:14px;
+      color:#777;
+      max-width:520px;
+      margin:20px auto;
+      line-height:1.4;
+    }
   </style>
 </head>
 <body>
+
   <div class="wrap">
     <h1>Send a Hug</h1>
     <p>Love you can hold — or send instantly.</p>
 
-    <img class="hero" src="assets/front.png" alt="HUGS Couples Valentine Card Front Cover">
+    <!-- FRONT COVER ONLY -->
+    <img class="hero" src="assets/front.png" alt="HUGS Couples Valentine Card – Front Preview">
 
-    <a class="btn" href="mailto:YOUR_EMAIL?subject=Purchase HUGS Valentine Card">
+    <!-- PURCHASE CTA -->
+    <a class="btn"
+       href="mailto:YOUR_EMAIL@gmail.com
+       ?subject=Purchase%20HUGS%20Valentine%20Card
+       &body=Hi%20HUGS%2C%0A%0AI%20would%20like%20to%20purchase%20the%20HUGS%20Valentine%20Card.%0A%0APlease%20send%20me%20payment%20instructions.%0A%0AThank%20you!">
       Purchase Card ($3.99)
     </a>
 
-    <div class="small">
+    <div class="note">
       After purchase, you’ll receive the full inside artwork and printable card by email.
+      <br><br>
+      No downloads are shared publicly.
     </div>
 
-    <div class="small">🫂 HUGS Community</div>
+    <div class="note">🫂 HUGS Community</div>
   </div>
+
 </body>
 </html>
