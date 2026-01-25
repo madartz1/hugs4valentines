@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A Hug For You</title>
+<style>
+  body{
+    margin:0;
+    background: linear-gradient(180deg, #7a1f2b, #b83b5e);
+    font-family: Georgia, serif;
+    display:flex; justify-content:center; align-items:center;
+    min-height:100vh; padding: 18px;
+  }
+  .card{
+    max-width: 760px; width: 96%;
+    background:#fff; border-radius:14px; overflow:hidden;
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+  }
+  .page{ padding: 22px; text-align:center; }
+  img{ width:100%; border-radius:12px; }
+  h1{ color:#b83b5e; margin: 14px 0 6px; }
+  p{ margin:0; font-size:18px; color:#444; }
+  .footer{ margin-top:12px; font-size:14px; color:#777; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="page">
+      <img src="/assets/front.png" alt="Front Cover">
+    </div>
+    <div class="page">
+      <img src="/assets/inside.png" alt="Inside Spread">
+      <h1>You &amp; Me</h1>
+      <p>(power of love!)</p>
+      <div class="footer">— A Hug from HUGS</div>
+    </div>
+  </div>
+</body>
+</html>
