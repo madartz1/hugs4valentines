@@ -64,7 +64,27 @@
       buy-button-id="buy_btn_1SuHr3C4MrFpGMghgaUslB9C"
       publishable-key="pk_live_51SuGbPC4MrFpGMghSuLjAc5SQznK7yN9ViFrT6TEPRGdwY3p90kRC4pdo66A4qI6f1PY40CRhuBys74tsCAmk7m500mnq7YH1M">
     </stripe-buy-button>
+<!-- PREVIEW BUTTON -->
+<button class="btn" onclick="openPreview()">Preview Card</button>
 
+<!-- PREVIEW MODAL -->
+<div id="previewModal" class="modal" onclick="closePreview(event)">
+  <div class="modal-content">
+    <span class="close" onclick="closePreview()">×</span>
+
+    <h2>Card Preview</h2>
+
+    <div class="preview-grid">
+      <img src="assets/front.png" alt="Front Preview">
+      <img src="assets/inside-preview.png" alt="Inside Preview">
+      <img src="assets/back-preview.png" alt="Back Preview">
+    </div>
+
+    <p class="note">
+      Full interactive card unlocks after purchase.
+    </p>
+  </div>
+</div>
     <a class="btn" href="preview.html">View Card Preview</a>
   </div>
 </body>
