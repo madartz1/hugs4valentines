@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HUGS4Valentines</title>
+
+  <style>
+    /* ===== Base ===== */
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#fff6f6;
+      color:#222;
+      text-align:center;
+      padding:40px 18px;
+    }
+    .wrap{max-width:760px;margin:0 auto;}
+    h1{color:#b83b5e;margin:0 0 8px;}
+    p{color:#555;font-size:18px;line-height:1.4;margin:0 0 14px;}
+
+    /* ===== Hero ===== */
+    .hero{
+      width:100%;
+      max-width:520px;
+      border-radius:16px;
+      box-shadow:0 18px 45px rgba(0,0,0,.18);
+      margin:18px auto 14px;
+      animation: fadeUp .8s ease-out both, floatSoft 5s ease-in-out infinite;
+    }
+
+    /* ===== Buttons ===== */
+    .btn{
+      display:block;
+      margin:12px auto;
+      padding:14px 18px;
+      max-width:360px;
+      background:#444;
+      color:#fff;
+      text-decoration:none;
+      border-radius:10px;
+      font-size:18px;
+      border:none;
+      cursor:pointer;
+    }
+    .btn.secondary{background:#b83b5e;}
+
+    /* ===== Animations ===== */
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(16px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    @keyframes floatSoft{
+      0%{transform:translateY(0);}
+      50%{transform:translateY(-6px);}
+      100%{transform:translateY(0);}
+    }
+
+    /* ===== Modal ===== */
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:rgba(0,0,0,.65);
+      backdrop-filter:blur(4px);
+      padding:18px;
+    }
+    .modal.open{display:block;}
+
+    .modal-content{
+      max-width:920px;
+      margin:6vh auto;
+      background:#fff;
+      border-radius:18px;
+      padding:18px 16px 16px;
+      position:relative;
+      box-shadow:0 22px 70px rgba(0,0,0,.35);
+      animation: pop .18s ease-out both;
+    }
+    @keyframes pop{
+      from{transform:translateY(10px) scale(.98);opacity:0;}
+      to{transform:translateY(0) scale(1);opacity:1;}
+    }
+
+    .close{
+      position:absolute;
+      top:10px;
+      right:12px;
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:0;
+      background:#111;
+      color:#fff;
+      font-size:26px;
+      line-height:42px;
+      cursor:pointer;
+    }
+
+    .modal-title{
+      margin:6px 0 14px;
+      color:#b83b5e;
+      font-size:22px;
+    }
+
+    .note{
+      font-size:14px;
+      color:#777;
+      margin-top:14px;
+    }
+
+    /* ===== Slideshow ===== */
+    .slideshow{
+      display:grid;
+      grid-template-columns:48px 1fr 48px;
+      align-items:center;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .slide-frame{
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+    }
+
+    .slide-frame img{
+      width:100%;
+      display:block;
+      height:auto;
+      transition:opacity .35s ease;
+    }
+
+    .caption{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      background:rgba(0,0,0,.55);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:14px;
+      text-align:center;
+    }
+
+    .nav{
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      border:0;
+      background:#111;
+      color:#fff;
+      font-size:28px;
+      line-height:44px;
+      cursor:pointer;
+    }
+
+    .dots{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:12px 0 0;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      border:0;
+      background:#cfcfcf;
+      cursor:pointer;
+    }
+    .dot.active{ background:#b83b5e; }
+
+    .controls2{
+      display:flex;
+      justify-content:center;
+      margin-top:10px;
+    }
+
+    .mini{
+      border:0;
+      background:#444;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Here’s a Hug</h1>
+    <p>Preview the card, then checkout to unlock the full interactive experience.</p>
+
+    <img class="hero" src="assets/front.png" alt="Valentine Card Preview">
+
+    <!-- STRIPE BUY BUTTON -->
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <stripe-buy-button
+      buy-button-id="buy_btn_1SuHr3C4MrFpGMghgaUslB9C"
+      publishable-key="pk_live_51SuGbPC4MrFpGMghSuLjAc5SQznK7yN9ViFrT6TEPRGdwY3p90kRC4pdo66A4qI6f1PY40CRhuBys74tsCAmk7m500mnq7YH1M">
+    </stripe-buy-button>
+
+    <!-- PREVIEW BUTTON -->
+    <button type="button" class="btn secondary" id="previewBtn">Preview Card</button>
+  </div>
+
+  <!-- PREVIEW MODAL -->
+  <div id="previewModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-label="Card Preview">
+      <button type="button" class="close" id="closePreviewBtn" aria-label="Close preview">×</button>
+      <h2 class="modal-title">Card Preview</h2>
+
+      <!-- Slideshow -->
+      <div class="slideshow">
+        <button class="nav prev" type="button" aria-label="Previous slide">‹</button>
+
+        <div class="slide-frame">
+          <img id="slideImg" src="assets/front.png" alt="Card preview slide">
+          <div id="slideCap" class="caption">Front (Full)</div>
+        </div>
+
+        <button class="nav next" type="button" aria-label="Next slide">›</button>
+      </div>
+
+      <div class="dots" id="dots"></div>
+
+      <div class="controls2">
+        <button class="mini" id="togglePlay" type="button">Pause</button>
+      </div>
+
+      <p class="note">Full interactive card unlocks after purchase.</p>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("previewModal");
+    const openBtn = document.getElementById("previewBtn");
+    const closeBtn = document.getElementById("closePreviewBtn");
+
+    const slides = [
+      { src: "assets/front.png", caption: "Front (Full)" },
+      { src: "assets/inside-preview.png", caption: "Inside (Preview)" },
+      { src: "assets/back-preview.png", caption: "Back (Preview)" }
+    ];
+
+    let current = 0;
+    let timer = null;
+    let playing = true;
+
+    const img = document.getElementById("slideImg");
+    const cap = document.getElementById("slideCap");
+    const dotsWrap = document.getElementById("dots");
+    const togglePlayBtn = document.getElementById("togglePlay");
+
+    // Build dots
+    dotsWrap.innerHTML = "";
+    slides.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.className = "dot" + (i === 0 ? " active" : "");
+      b.type = "button";
+      b.addEventListener("click", () => goTo(i, true));
+      dotsWrap.appendChild(b);
+    });
+
+    function updateDots(){
+      [...dotsWrap.children].forEach((d, i) => {
+        d.classList.toggle("active", i === current);
+      });
+    }
+
+    function render(){
+      img.style.opacity = 0;
+      setTimeout(() => {
+        img.src = slides[current].src;
+        cap.textContent = slides[current].caption;
+        updateDots();
+        img.style.opacity = 1;
+      }, 140);
+    }
+
+    function next(){
+      current = (current + 1) % slides.length;
+      render();
+    }
+
+    function prev(){
+      current = (current - 1 + slides.length) % slides.length;
+      render();
+    }
+
+    function goTo(i, userAction=false){
+      current = i;
+      render();
+      if (userAction && playing) restart();
+    }
+
+    function start(){
+      stop();
+      timer = setInterval(next, 2800);
+    }
+
+    function stop(){
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function restart(){
+      if (playing) start();
+    }
+
+    function openPreview(){
+      modal.classList.add("open");
+      current = 0;
+      render();
+      playing = true;
+      togglePlayBtn.textContent = "Pause";
+      start();
+    }
+
+    function closePreview(){
+      modal.classList.remove("open");
+      stop();
+    }
+
+    openBtn.addEventListener("click", openPreview);
+    closeBtn.addEventListener("click", closePreview);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closePreview();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closePreview();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!modal.classList.contains("open")) return;
+      if (e.target.closest(".nav.next")) next();
+      if (e.target.closest(".nav.prev")) prev();
+    });
+
+    togglePlayBtn.addEventListener("click", () => {
+      playing = !playing;
+      togglePlayBtn.textContent = playing ? "Pause" : "Play";
+      playing ? start() : stop();
+    });
+  </script>
+</body>
+</html>
