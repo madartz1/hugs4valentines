@@ -19,6 +19,9 @@
     h1{color:#b83b5e;margin:0 0 8px;}
     p{color:#555;font-size:18px;line-height:1.4;margin:0 0 14px;}
 
+    /* keep content above homepage hearts */
+    .wrap, .modal{ position:relative; z-index:2; }
+
     /* ===== Hero ===== */
     .hero{
       width:100%;
@@ -54,6 +57,56 @@
       0%{transform:translateY(0);}
       50%{transform:translateY(-6px);}
       100%{transform:translateY(0);}
+    }
+
+    /* ===== Floating Hearts on Homepage ===== */
+    #homeHearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .home-heart{
+      position:absolute;
+      bottom:-30px;
+      opacity:0.25;
+      animation: homeFloat linear forwards;
+      filter: blur(.2px);
+    }
+    @keyframes homeFloat{
+      from{ transform:translateY(0) scale(1); opacity:0; }
+      10%{ opacity:.25; }
+      to{ transform:translateY(-120vh) scale(1.6); opacity:0; }
+    }
+
+    /* ===== Chronological Story Strip ===== */
+    .story-title{
+      margin:18px 0 10px;
+      color:#b83b5e;
+      font-size:18px;
+    }
+    .story{
+      margin:10px auto 16px;
+      max-width:740px;
+      display:flex;
+      gap:12px;
+      overflow:auto;
+      padding:10px;
+      scroll-snap-type:x mandatory;
+      border-radius:14px;
+      background:rgba(255,255,255,.55);
+      box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+    .story::-webkit-scrollbar{ height:8px; }
+    .story::-webkit-scrollbar-thumb{ background:#e8b2c2; border-radius:20px; }
+    .story img{
+      width:220px;
+      height:auto;
+      border-radius:14px;
+      box-shadow:0 12px 30px rgba(0,0,0,.12);
+      scroll-snap-align:start;
+      flex:0 0 auto;
     }
 
     /* ===== Modal ===== */
@@ -205,7 +258,7 @@
       font-size:14px;
     }
 
-    /* ===== Heart particles ===== */
+    /* ===== Heart particles (inside preview modal) ===== */
     #hearts{
       position:absolute;
       inset:0;
@@ -232,11 +285,26 @@
 </head>
 
 <body>
+  <!-- Floating hearts behind everything -->
+  <div id="homeHearts"></div>
+
   <div class="wrap">
     <h1>Here’s a Hug</h1>
-    <p>Preview the card, then checkout to unlock the full interactive experience.</p>
+    <p>Preview the hug story, then checkout to unlock the full interactive experience.</p>
 
-    <img class="hero" src="assets/front.png" alt="Valentine Card Preview">
+    <!-- HERO -->
+    <img class="hero" src="assets/front.png" alt="HUGS Valentine Card Preview">
+
+    <!-- STORY STRIP (chronological preview) -->
+    <div class="story-title">A Hug Story (Preview)</div>
+    <div class="story" aria-label="HUG story preview">
+      <img src="assets/scene-01.png" alt="Scene 1">
+      <img src="assets/scene-02.png" alt="Scene 2">
+      <img src="assets/scene-03.png" alt="Scene 3">
+      <img src="assets/scene-04.png" alt="Scene 4">
+      <img src="assets/scene-05.png" alt="Scene 5">
+      <img src="assets/couple-heart.png" alt="Couple heart scene">
+    </div>
 
     <!-- STRIPE BUY BUTTON -->
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
@@ -248,7 +316,7 @@
     <!-- PREVIEW BUTTON -->
     <button type="button" class="btn secondary" id="previewBtn">Preview Card</button>
 
-    <p class="note">After purchase, Stripe should redirect to <b>/thank-you.html</b>.</p>
+    <p class="note">Tip: set your Stripe success URL to <b>/thank-you.html</b> so buyers can open the full card.</p>
   </div>
 
   <!-- PREVIEW MODAL -->
@@ -260,7 +328,7 @@
       <!-- Heart particles container -->
       <div id="hearts"></div>
 
-      <!-- Preview music (starts on preview open) -->
+      <!-- Preview music -->
       <audio id="previewMusic" loop>
         <source src="assets/preview-music.mp3" type="audio/mpeg">
       </audio>
@@ -270,8 +338,8 @@
         <button class="nav prev" type="button" aria-label="Previous slide">‹</button>
 
         <div class="slide-frame">
-          <img id="slideImg" src="assets/front.png" alt="Card preview slide">
-          <div id="slideCap" class="caption">Front (Full)</div>
+          <img id="slideImg" src="assets/scene-01.png" alt="Card preview slide">
+          <div id="slideCap" class="caption">Scene 1</div>
         </div>
 
         <button class="nav next" type="button" aria-label="Next slide">›</button>
@@ -288,6 +356,22 @@
   </div>
 
   <script>
+    /* ===== Homepage floating hearts (always on) ===== */
+    const homeHearts = document.getElementById("homeHearts");
+
+    function spawnHomeHeart(){
+      const h = document.createElement("div");
+      h.className = "home-heart";
+      h.textContent = Math.random() > 0.5 ? "❤" : "💗";
+      h.style.left = (Math.random() * 100) + "%";
+      h.style.fontSize = (10 + Math.random() * 18) + "px";
+      h.style.animationDuration = (10 + Math.random() * 8) + "s";
+      homeHearts.appendChild(h);
+      setTimeout(() => h.remove(), 20000);
+    }
+    setInterval(spawnHomeHeart, 900);
+
+    /* ===== Preview modal slideshow + hearts + music ===== */
     const modal = document.getElementById("previewModal");
     const openBtn = document.getElementById("previewBtn");
     const closeBtn = document.getElementById("closePreviewBtn");
@@ -295,14 +379,15 @@
     const music = document.getElementById("previewMusic");
     const hearts = document.getElementById("hearts");
 
+    // UPDATED: chronologic story slides
     const slides = [
-  { src: "assets/scene-01.png", caption: "Scene 1" },
-  { src: "assets/scene-02.png", caption: "Scene 2" },
-  { src: "assets/scene-03.png", caption: "Scene 3" },
-  { src: "assets/scene-04.png", caption: "Scene 4" },
-  { src: "assets/scene-05.png", caption: "Scene 5" },
-  { src: "assets/couple-heart.png", caption: "Couple Heart" }
-];
+      { src: "assets/scene-01.png", caption: "Scene 1" },
+      { src: "assets/scene-02.png", caption: "Scene 2" },
+      { src: "assets/scene-03.png", caption: "Scene 3" },
+      { src: "assets/scene-04.png", caption: "Scene 4" },
+      { src: "assets/scene-05.png", caption: "Scene 5" },
+      { src: "assets/couple-heart.png", caption: "Couple Heart" }
+    ];
 
     let current = 0;
     let timer = null;
@@ -347,11 +432,14 @@
       if (userAction && playing) restart();
     }
 
-    function start(){ stop(); timer = setInterval(next, 2800); }
+    function start(){
+      stop();
+      timer = setInterval(next, 3600); // slower, smoother
+    }
     function stop(){ if (timer) clearInterval(timer); timer = null; }
     function restart(){ if (playing) start(); }
 
-    // Hearts
+    // Hearts in modal
     function spawnHeart(){
       const h = document.createElement("div");
       h.className = "heart";
@@ -382,7 +470,6 @@
       togglePlayBtn.textContent = "Pause";
       start();
 
-      // Start hearts + music
       startHearts();
       music.volume = 0.6;
       music.play().catch(()=>{});
